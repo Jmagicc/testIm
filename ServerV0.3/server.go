@@ -66,19 +66,20 @@ func (this *Server) Handler(conn net.Conn) {
 		for {
 			n, err := conn.Read(buf)
 			if n == 0 {
-				user.offline()
+				user.Offline()
 				return
 			}
+
 			if err != nil && err != io.EOF {
 				fmt.Println("Conn Read err:", err)
 				return
 			}
+
 			//提取用户的消息(去除'\n')
 			msg := string(buf[:n-1])
 
-			//用户针对message做处理
-			user.DoHandleMessage(msg)
-
+			//用户针对msg进行消息处理
+			user.DoMessage(msg)
 		}
 	}()
 
@@ -111,5 +112,4 @@ func (this *Server) Start() {
 		//do handler
 		go this.Handler(conn)
 	}
-
 }
